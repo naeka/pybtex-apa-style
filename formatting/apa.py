@@ -125,7 +125,7 @@ class APAStyle(BaseStyle):
 
     def format_web_refs(self, e):
         # Based on urlbst output.web.refs
-        return sentence[
+        return sentence(add_period=False)[
             optional[self.format_url(e)],
             optional[self.format_eprint(e)],
             optional[self.format_pubmed(e)],
