@@ -218,7 +218,7 @@ class APAStyle(BaseStyle):
                 self.format_btitle(e, 'title'),
                 optional[
                     sentence[
-                        optional_field('edition'),
+                        optional[field('edition'), ' ed.'],
                         self.format_volume(e),
                     ]
                 ]
@@ -259,7 +259,7 @@ class APAStyle(BaseStyle):
                     join[
                         "(",
                         sentence(add_period=False)[
-                            optional_field('edition'),
+                            optional[field('edition'), ' ed.'],
                             self.format_volume(e),
                             pages,
                         ],
