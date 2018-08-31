@@ -201,9 +201,9 @@ class APAStyle(BaseStyle):
                 join["(", date, ")"]
             ],
             self.format_title(e, 'title'),
-            sentence(sep=' ')[
+            sentence[
                 tag('em')[field('journal')],
-                optional["(", volume_and_pages, ")"],
+                optional[volume_and_pages],
             ],
             sentence[optional_field('note')],
             self.format_web_refs(e),
