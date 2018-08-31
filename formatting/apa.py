@@ -197,7 +197,9 @@ class APAStyle(BaseStyle):
         ]
         template = toplevel[
             self.format_names('author'),
-            join["(", date, ")"],
+            sentence[
+                join["(", date, ")"]
+            ],
             self.format_title(e, 'title'),
             sentence(sep=' ')[
                 tag('em')[field('journal')],
@@ -334,7 +336,10 @@ class APAStyle(BaseStyle):
         # Required fields: author, title, school, year
         # Optional fields: address, month, note, key
         return toplevel[
-            join[self.format_names('author'), " (", date, ")"],
+            sentence(sep=' ')[
+                self.format_names('author'),
+                join["(", date, ")"]
+            ],
             sentence(sep=' ')[
                 self.format_btitle(e, 'title', as_sentence=False),
                 "(Master's thesis)"
@@ -367,7 +372,10 @@ class APAStyle(BaseStyle):
         # Required fields: author, title, school, year
         # Optional fields: address, month, note, key
         return toplevel[
-            join[self.format_names('author'), " (", date, ")"],
+            sentence(sep=' ')[
+                self.format_names('author'),
+                join["(", date, ")"]
+            ],
             sentence(sep=' ')[
                 self.format_btitle(e, 'title', as_sentence=False),
                 "(Doctoral dissertation)"
