@@ -1,6 +1,8 @@
+# -*- coding:Utf-8 -*-
 from __future__ import unicode_literals
 
 import re
+import six
 
 from pybtex.plugin import find_plugin
 from pybtex.style.formatting import BaseStyle, toplevel
@@ -12,15 +14,23 @@ from pybtex.style.template import (
 from pybtex.richtext import Text, Symbol
 
 
-firstlast = find_plugin('pybtex.style.names', 'firstlast')
+firstlast = find_plugin('pybtex.style.names', 'firstlast')()
 
-
-def format_pages(text):
-    dash_re = re.compile(r'-+')
-    pages = Text(Symbol('ndash')).join(text.split(dash_re))
-    if re.search('[-‒–—―]', str(text)):
-        return Text("pp.", Symbol('nbsp'), pages)
-    return Text("p.", Symbol('nbsp'), pages)
+if six.PY2:
+    def format_pages(text):
+        dash_re = re.compile(r'-+')
+        pages = Text(Symbol('ndash')).join(
+            re.split(dash_re, six.text_type(text)))
+        if re.search('[-‒–—―]', six.text_type(text)):
+            return Text("pp.", Symbol('nbsp'), pages)
+        return Text("p.", Symbol('nbsp'), pages)
+else:
+    def format_pages(text):
+        dash_re = re.compile(r'-+')
+        pages = Text(Symbol('ndash')).join(text.split(dash_re))
+        if re.search('[-‒–—―]', str(text)):
+            return Text("pp.", Symbol('nbsp'), pages)
+        return Text("p.", Symbol('nbsp'), pages)
 
 
 pages = field('pages', apply_func=format_pages)
@@ -66,9 +76,8 @@ def editor_names(children, context, with_suffix=True, **kwargs):
     except KeyError:
         raise FieldIsMissing('editor', context['entry'])
 
-    style = context['style']
     formatted_names = [
-        firstlast.format(style, editor, True) for editor in editors]
+        firstlast.format(editor, True) for editor in editors]
 
     if with_suffix:
         return words[
