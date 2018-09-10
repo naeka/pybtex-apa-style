@@ -8,10 +8,11 @@ setuptools.setup(
     author_email='contact@naeka.fr',
     description='Pybtex APA-like style',
     url='https://github.com/naeka/pybtex-apa-style',
-    py_modules=['formatting.apa', 'labels.apa'],
+    py_modules=['formatting.apa', 'labels.apa', 'names.firstlast'],
     entry_points={
         'pybtex.style.formatting': 'apa = formatting.apa:APAStyle',
         'pybtex.style.labels': 'apa = labels.apa:LabelStyle',
+        'pybtex.style.names': 'firstlast = names.firstlast:NameStyle',
     },
     classifiers=(
         'Operating System :: OS Independent',

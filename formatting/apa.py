@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import re
 
+from pybtex.plugin import find_plugin
 from pybtex.style.formatting import BaseStyle, toplevel
 from pybtex.style.template import (
     field, first_of, href, join, optional, optional_field, sentence, tag,
@@ -9,6 +10,9 @@ from pybtex.style.template import (
 )
 
 from pybtex.richtext import Text, Symbol
+
+
+firstlast = find_plugin('pybtex.style.names', 'firstlast')
 
 
 def format_pages(text):
@@ -48,6 +52,33 @@ def apa_names(children, context, role, **kwargs):
             person, style.abbreviate_names) for person in persons]
         return join(sep=', ', sep2=', & ', last_sep=', & ')[
             formatted_names].format_data(context)
+
+
+@node
+def editor_names(children, context, with_suffix=True, **kwargs):
+    """
+    Returns formatted editor names for inbook.
+    """
+    assert not children
+
+    try:
+        editors = context['entry'].persons['editor']
+    except KeyError:
+        raise FieldIsMissing('editor', context['entry'])
+
+    style = context['style']
+    formatted_names = [
+        firstlast.format(style, editor, True) for editor in editors]
+
+    if with_suffix:
+        return words[
+            join(sep=', ', sep2=', & ', last_sep=', & ')[formatted_names],
+            "(Eds.)" if len(editors) > 1 else "(Ed.)"
+        ].format_data(context)
+
+    return join(sep=', ', sep2=', & ', last_sep=', & ')[
+        formatted_names
+    ].format_data(context)
 
 
 class APAStyle(BaseStyle):
@@ -254,9 +285,17 @@ class APAStyle(BaseStyle):
         # Required fields: author/editor, title, chapter/pages, publisher, year
         # Optional fields: volume, series, address, edition, month, note, key
         return toplevel[
-            self.format_author_or_editor_and_date(e),
             sentence(sep=' ')[
-                self.format_btitle(e, 'title', as_sentence=False),
+                self.format_names('author'),
+                join["(", date, ")"]
+            ],
+            self.format_title(e, 'title'),
+            sentence(sep=' ')[
+                optional[
+                    "In ",
+                    editor_names()
+                ],
+                self.format_btitle(e, 'booktitle', as_sentence=False),
                 optional[
                     join[
                         "(",
