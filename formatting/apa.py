@@ -131,7 +131,7 @@ class APAStyle(BaseStyle):
     def format_volume(self, e, for_article=False):
         prefix = "Vol."
         if for_article:
-            return optional[
+            return join[
                 tag('em')[field('volume')],
                 optional['(', field('number'), ')'],
             ]
