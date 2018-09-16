@@ -229,7 +229,7 @@ class APAStyle(BaseStyle):
             optional[
                 join[
                     self.format_volume(e, for_article=True),
-                    optional[', ', pages]
+                    optional[', ', field('pages')]
                 ],
             ],
             # Pages only
