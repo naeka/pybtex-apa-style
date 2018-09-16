@@ -302,7 +302,8 @@ class APAStyle(BaseStyle):
             sentence(sep=' ')[
                 optional[
                     "In ",
-                    editor_names()
+                    editor_names(),
+                    ","
                 ],
                 self.format_btitle(e, 'booktitle', as_sentence=False),
                 optional[
