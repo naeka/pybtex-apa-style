@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name='pybtex-apa-style',
-    version='1.2',
+    version='1.3',
     author='Naeka',
     author_email='contact@naeka.fr',
     description='Pybtex APA-like style',
